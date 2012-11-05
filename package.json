@@ -1,0 +1,19 @@
+{
+  "author": "Luca Ongaro <mail@lucaongaro.eu> (http://www.lucaongaro.eu)",
+  "name": "wheels-class",
+  "description": "Simple and powerful classical inheritance for JavaScript. Fully compatible with CommonJS / Node, AMD and standard browser script tag include",
+  "version": "0.0.1",
+  "main": "wheels-class",
+  "scripts": {
+    "test": "node_modules/.bin/buster-test && node_modules/.bin/buster-test --config spec/buster-no-amd.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "buster": "~0.6.2",
+    "buster-amd": "~0.2.0"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
