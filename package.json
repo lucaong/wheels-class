@@ -4,6 +4,10 @@
   "description": "Simple and powerful classical inheritance for JavaScript. Fully compatible with CommonJS / Node, AMD and standard browser script tag include",
   "version": "0.0.1",
   "main": "wheels-class",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucaong/wheels-class.git"
+  },
   "scripts": {
     "test": "node_modules/.bin/buster-test && node_modules/.bin/buster-test --config spec/buster-no-amd.js"
   },
