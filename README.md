@@ -9,23 +9,21 @@ Install
 
 `wheels-class` can be installed with CommonJS / npm, AMD or standard browser script tag:
 
-npm
----
+**npm**
 
 ```shell
 npm install wheels-class
 ```
 
-AMD / RequireJS
----------------
+**AMD / RequireJS**
 
 ```javascript
 require(["wheels-class"], function( Class ) {
 	var MyClass = new Class();
 });
+```
 
-Traditional browser script tag
-------------------------------
+**Traditional browser script tag**
 
 ```html
 <script type="text/javascript" src="path/to/wheels-class.js"></script>
