@@ -1,7 +1,7 @@
 Wheels Class
 ===========
 
-Simple and powerful classical inheritance for JavaScript. Super lightweight, with no dependencies and fully compatible with CommonJS (Node), AMD and standard browser script tag include.
+Simple and powerful classical inheritance for JavaScript. Super lightweight, with no dependencies and fully compatible with CommonJS / npm, AMD and standard browser script tag include.
 
 
 Install
@@ -39,7 +39,7 @@ Usage
 Class definition
 ----------------
 
-Passing an object literal, create a class setting the object's properties to the prototype:
+Pass an object literal to the constructor to create a class and set the object's properties to the class' prototype:
 
 ```javascript
 var Foo = new Class({
@@ -52,7 +52,7 @@ var foo = new Foo();
 foo.greet(); // => "Hello :)"
 ```
 
-Passing a function causes the function to be executed in the scope of the class:
+Passing a function to the constructor causes the function to be executed in the scope of the class:
 
 ```javascript
 var Foo = new Class(function() {
@@ -76,7 +76,7 @@ foo.greet();        // => "Hello :)"
 Class inheritance
 -----------------
 
-Create a subclass with the `subclass` method, which accepts the same arguments as the `Class` constructor:
+The `subclass` method creates a subclass and accepts the same arguments as the constructor:
 
 ```javascript
 var Foo = new Class({
@@ -99,7 +99,7 @@ bar.whoami(); // => "bar"
 Include and augment
 -------------------
 
-The `include` method accepts an object and copy its properties to the class' prototype:
+The `include` method accepts an object and copies its properties to the class' prototype:
 
 ```javascript
 var Foo = new Class();
@@ -114,7 +114,7 @@ var foo = new Foo();
 foo.quack(); // => "Quack!"
 ```
 
-The `augment` method accepts an object and copy its properties to the class:
+The `augment` method accepts an object and copies its properties to the class:
 
 ```javascript
 var Foo = new Class();
