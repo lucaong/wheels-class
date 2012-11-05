@@ -4,6 +4,37 @@ Wheels Class
 Simple and powerful classical inheritance for JavaScript. Super lightweight, with no dependencies and fully compatible with CommonJS (Node), AMD and standard browser script tag include.
 
 
+Install
+=======
+
+`wheels-class` can be installed with CommonJS / npm, AMD or standard browser script tag:
+
+npm
+---
+
+```shell
+npm install wheels-class
+```
+
+AMD / RequireJS
+---------------
+
+```javascript
+require(["wheels-class"], function( Class ) {
+	var MyClass = new Class();
+});
+
+Traditional browser script tag
+------------------------------
+
+```html
+<script type="text/javascript" src="path/to/wheels-class.js"></script>
+<script type="text/javascript">
+	var MyClass = new Wheels.Class();
+</script>
+```
+
+
 Usage
 =====
 
@@ -47,7 +78,7 @@ foo.greet();        // => "Hello :)"
 Class inheritance
 -----------------
 
-Create a subclass with the `sub` method, which accepts the same arguments as the `Class` constructor:
+Create a subclass with the `subclass` method, which accepts the same arguments as the `Class` constructor:
 
 ```javascript
 var Foo = new Class({
@@ -56,7 +87,7 @@ var Foo = new Class({
 	}
 });
 
-var Bar = Foo.sub({
+var Bar = Foo.subclass({
 	whoami: function() {
 		return "bar";
 	}
