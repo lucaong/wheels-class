@@ -45,6 +45,11 @@ function runTests( Class ) {
 			expect( whats_this ).toBe( Foo );
 		});
 
+		it("should have a _superclass property pointing to Function", function() {
+			var Foo = new Class();
+			expect( Foo._superclass ).toBe( Function );
+		});
+
 	});
 
 	describe("class instance", function() {
@@ -67,6 +72,12 @@ function runTests( Class ) {
 						Foo = new Class({ initialize: spy }),
 						foo = new Foo();
 				expect( spy ).toHaveBeenCalled();
+			});
+
+			it("should have a _parent property pointing at Object", function() {
+				var Foo = new Class(),
+						foo = new Foo();
+				expect( foo._parent ).toBe( Object );
 			});
 		});
 
@@ -116,6 +127,19 @@ function runTests( Class ) {
 						Foo = new Class({ prop: original_prop }),
 						Bar = Foo.subclass({ prop: prop });
 				expect( Foo.prototype.prop ).toBe( original_prop );
+			});
+
+			it("should set the _superclass property on subclass, pointing at the superclass", function() {
+				var Foo = new Class(),
+						Bar = Foo.subclass();
+				expect( Bar._superclass ).toBe( Foo );
+			});
+
+			it("should set the _parent property on instances, pointing at superclass.prototype", function() {
+				var Foo = new Class(),
+						Bar = Foo.subclass(),
+						bar = new Bar();
+				expect( bar._parent ).toBe( Foo.prototype );
 			});
 
 		});

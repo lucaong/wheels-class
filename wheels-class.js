@@ -32,10 +32,10 @@
       function klass() {
         superclass.apply( this, arguments );
       }
-      extend( klass, superclass );
+      extend( klass, superclass, { _superclass: superclass } );
       klass.prototype = proto;
       extendProtoOrApply( klass, mixin );
-      klass.prototype.constructor = klass;
+      extend( klass.prototype, { constructor: klass, _parent: superclass.prototype } );
       return klass;
     };
 
@@ -49,7 +49,8 @@
       this.augment.apply( this.prototype, arguments );
     };
 
-    klass.constructor = Class;
+    extend( klass, { constructor: Class, _superclass: Function } );
+    klass.prototype._parent = Object;
     extendProtoOrApply( klass, mixin );
 
     return klass;
