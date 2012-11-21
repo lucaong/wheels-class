@@ -19,7 +19,7 @@ npm install wheels-class
 
 ```javascript
 require(["wheels-class"], function( Class ) {
-	var MyClass = new Class();
+  var MyClass = new Class();
 });
 ```
 
@@ -28,7 +28,7 @@ require(["wheels-class"], function( Class ) {
 ```html
 <script type="text/javascript" src="path/to/wheels-class.js"></script>
 <script type="text/javascript">
-	var MyClass = new Wheels.Class();
+  var MyClass = new Wheels.Class();
 </script>
 ```
 
@@ -43,9 +43,9 @@ Pass an object literal to the constructor to create a class and add the object's
 
 ```javascript
 var Foo = new Class({
-	greet: function() {
-		return "Hello :)";
-	}
+  greet: function() {
+    return "Hello :)";
+  }
 });
 
 var foo = new Foo();
@@ -57,13 +57,13 @@ Alternatively, you can pass a function to the constructor, and it will be execut
 ```javascript
 var Foo = new Class(function( proto ) {
 
-	this.classMethod = function() {
-		return "I am a class method";
-	}
+  this.classMethod = function() {
+    return "I am a class method";
+  }
 
-	proto.instanceMethod = function() {
-		return "Hello :)";
-	}
+  proto.instanceMethod = function() {
+    return "Hello :)";
+  }
 
 });
 
@@ -80,15 +80,15 @@ The `subclass` method creates a subclass and accepts the same arguments as the c
 
 ```javascript
 var Animal = new Class({
-	eat: function() {
-		return "Yum :)";
-	}
+  eat: function() {
+    return "Yum :)";
+  }
 });
 
 var Cat = Animal.subclass({
-	meow: function() {
-		return "Meow!";
-	}
+  meow: function() {
+    return "Meow!";
+  }
 });
 
 var nyan = new Cat();
@@ -111,9 +111,9 @@ The `include` method accepts an object and copies its properties to the class' `
 var Duck = new Class();
 
 Duck.include({
-	quack: function() {
-		return "Quack!";
-	}
+  quack: function() {
+    return "Quack!";
+  }
 });
 
 var donald = new Duck();
@@ -126,9 +126,9 @@ The `augment` method accepts an object and copies its properties to the class:
 var Foo = new Class();
 
 Foo.augment({
-	classMethod: function() {
-		return "I am a class method!";
-	}
+  classMethod: function() {
+    return "I am a class method!";
+  }
 });
 
 Foo.classMethod(); // => "I am a class method!"
