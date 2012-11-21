@@ -39,7 +39,7 @@ Usage
 Class definition
 ----------------
 
-Pass an object literal to the constructor to create a class and set the object's properties to the class' prototype:
+Pass an object literal to the constructor to create a class and add the object's properties to the class `prototype` property:
 
 ```javascript
 var Foo = new Class({
@@ -52,16 +52,16 @@ var foo = new Foo();
 foo.greet(); // => "Hello :)"
 ```
 
-Passing a function to the constructor causes the function to be executed in the scope of the class:
+Alternatively, you can pass a function to the constructor, and it will be executed in the scope of the class. That means that, whithin the function, `this` is the class itself. Also, the function will receive the `prototype` property of the class as the first argument:
 
 ```javascript
-var Foo = new Class(function() {
+var Foo = new Class(function( proto ) {
 
 	this.classMethod = function() {
 		return "I am a class method";
 	}
 
-	this.prototype.greet = function() {
+	proto.instanceMethod = function() {
 		return "Hello :)";
 	}
 
@@ -69,8 +69,8 @@ var Foo = new Class(function() {
 
 var foo = new Foo();
 
-Foo.classMethod(); // => "I am a class method"
-foo.greet();        // => "Hello :)"
+Foo.classMethod();    // => "I am a class method"
+foo.instanceMethod(); // => "Hello :)"
 ```
 
 Class inheritance
@@ -79,39 +79,45 @@ Class inheritance
 The `subclass` method creates a subclass and accepts the same arguments as the constructor:
 
 ```javascript
-var Foo = new Class({
-	greet: function() {
-		return "Hello :)";
+var Animal = new Class({
+	eat: function() {
+		return "Yum :)";
 	}
 });
 
-var Bar = Foo.subclass({
-	whoami: function() {
-		return "bar";
+var Cat = Animal.subclass({
+	meow: function() {
+		return "Meow!";
 	}
 });
 
-var bar = new Bar();
-bar.greet();  // => "Hello :)"
-bar.whoami(); // => "bar"
+var nyan = new Cat();
+nyan.eat();  // => "Yum :)"
+nyan.meow(); // => "Meow!"
+
+// The subclass also stores a reference to the superclass
+Cat._superclass === Animal // => true
+
+// And the instance stores a reference to the parent prototype
+nyan._parent === Animal.prototype // => true
 ```
 
 Include and augment
 -------------------
 
-The `include` method accepts an object and copies its properties to the class' prototype:
+The `include` method accepts an object and copies its properties to the class' `prototype` property:
 
 ```javascript
-var Foo = new Class();
+var Duck = new Class();
 
-Foo.include({
+Duck.include({
 	quack: function() {
 		return "Quack!";
 	}
 });
 
-var foo = new Foo();
-foo.quack(); // => "Quack!"
+var donald = new Duck();
+donald.quack(); // => "Quack!"
 ```
 
 The `augment` method accepts an object and copies its properties to the class:

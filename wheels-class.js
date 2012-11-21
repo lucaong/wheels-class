@@ -14,7 +14,7 @@
 
         extendProtoOrApply = function( klass, mixin ) {
           if ( typeof mixin === "function" ) {
-            mixin.apply( klass );
+            mixin.call( klass, klass.prototype );
           } else {
             extend( klass.prototype, mixin );
           }

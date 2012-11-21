@@ -37,17 +37,29 @@ function runTests( Class ) {
 			expect( Foo.prototype.meth ).toBe( prop );
 		});
 
-		it("should execute function in the scope of the class instance if a function is passed", function() {
-			var whats_this,
-					Foo = new Class(function() {
-						whats_this = this;
-					});
-			expect( whats_this ).toBe( Foo );
-		});
-
 		it("should have a _superclass property pointing to Function", function() {
 			var Foo = new Class();
 			expect( Foo._superclass ).toBe( Function );
+		});
+
+		describe("when called passing a function", function() {
+
+			it("should execute the function in the scope of the class instance", function() {
+				var whats_this,
+						Foo = new Class(function() {
+							whats_this = this;
+						});
+				expect( whats_this ).toBe( Foo );
+			});
+
+			it("should call the function passing the class prototype property as the first argument", function() {
+				var probe,
+						Foo = new Class(function( proto ) {
+							probe = proto;
+						});
+				expect( probe ).toBe( Foo.prototype );
+			});
+
 		});
 
 	});
@@ -91,13 +103,26 @@ function runTests( Class ) {
 				expect( bar instanceof Foo ).toBeTrue();
 			});
 
-			it("should execute function in the scope of the subclass if a function is passed", function() {
-				var whats_this,
-						Foo = new Class(),
-						Bar = Foo.subclass(function() {
-							whats_this = this;
-						});
-				expect( whats_this ).toBe( Bar );
+			describe("when a function is passed", function() {
+
+				it("should execute the function in the scope of the subclass", function() {
+					var whats_this,
+							Foo = new Class(),
+							Bar = Foo.subclass(function() {
+								whats_this = this;
+							});
+					expect( whats_this ).toBe( Bar );
+				});
+
+				it("should call the function passing the subclass prototype property as the first argument", function() {
+					var probe,
+							Foo = new Class(),
+							Bar = Foo.subclass(function( proto ) {
+								probe = proto;
+							});
+					expect( probe ).toBe( Bar.prototype );
+				});
+
 			});
 
 			it("should set properties on subclass' prototype if an object is passed", function() {
