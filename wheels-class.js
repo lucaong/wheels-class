@@ -32,7 +32,12 @@
       function klass() {
         superclass.apply( this, arguments );
       }
-      extend( klass, superclass, { _superclass: superclass } );
+      if ( klass.__proto__ ) {
+        klass.__proto__ = superclass;
+      } else {
+        extend( klass, superclass );
+      }
+      extend( klass, { _superclass: superclass } );
       klass.prototype = proto;
       extendProtoOrApply( klass, mixin );
       extend( klass.prototype, { constructor: klass, _parent: superclass.prototype } );
