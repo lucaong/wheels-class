@@ -39,8 +39,8 @@
       }
       extend( klass, { _superclass: superclass } );
       klass.prototype = proto;
-      extendProtoOrApply( klass, mixin );
       extend( klass.prototype, { constructor: klass, _parent: superclass.prototype } );
+      extendProtoOrApply( klass, mixin );
       return klass;
     };
 
