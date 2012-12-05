@@ -26,25 +26,25 @@ function runTests( Class ) {
 
 	describe("Class constructor", function() {
 
-		it("should set the right constructor on class instance", function() {
+		it("sets the right constructor on class instance", function() {
 			var Foo = new Class();
 			expect( Foo.constructor ).toBe( Class );
 		});
 
-		it("should set prototype properties on class instance if an object is passed", function() {
+		it("sets prototype properties on class instance if an object is passed", function() {
 			var prop = function() {},
 					Foo = new Class({ meth: prop });
 			expect( Foo.prototype.meth ).toBe( prop );
 		});
 
-		it("should have a _superclass property pointing to Function", function() {
+		it("has a _superclass property pointing to Function", function() {
 			var Foo = new Class();
 			expect( Foo._superclass ).toBe( Function );
 		});
 
 		describe("when called passing a function", function() {
 
-			it("should execute the function in the scope of the class instance", function() {
+			it("executes the function in the scope of the class instance", function() {
 				var whats_this,
 						Foo = new Class(function() {
 							whats_this = this;
@@ -52,7 +52,7 @@ function runTests( Class ) {
 				expect( whats_this ).toBe( Foo );
 			});
 
-			it("should call the function passing the class prototype property as the first argument", function() {
+			it("calls the function passing the class prototype property as the first argument", function() {
 				var probe,
 						Foo = new Class(function( proto ) {
 							probe = proto;
@@ -67,26 +67,26 @@ function runTests( Class ) {
 	describe("class instance", function() {
 
 		describe("new", function() {
-			it("should instantiate class", function() {
+			it("instantiates class", function() {
 				var Foo = new Class(),
 						foo = new Foo();
 				expect( foo instanceof Foo ).toBeTrue();
 			});
 
-			it("should set the right constructor", function() {
+			it("sets the right constructor", function() {
 				var Foo = new Class(),
 						foo = new Foo();
 				expect( foo.constructor ).toBe( Foo );
 			});
 
-			it("should call the initialize method, if defined", function() {
+			it("calls the initialize method, if defined", function() {
 				var spy = this.spy(),
 						Foo = new Class({ initialize: spy }),
 						foo = new Foo();
 				expect( spy ).toHaveBeenCalled();
 			});
 
-			it("should have a _parent property pointing at Object", function() {
+			it("has a _parent property pointing at Object", function() {
 				var Foo = new Class(),
 						foo = new Foo();
 				expect( foo._parent ).toBe( Object );
@@ -95,7 +95,7 @@ function runTests( Class ) {
 
 		describe("subclass", function() {
 
-			it("should implement inheritance", function() {
+			it("implements inheritance", function() {
 				var Foo = new Class(),
 						Bar = Foo.subclass(),
 						bar = new Bar();
@@ -105,7 +105,7 @@ function runTests( Class ) {
 
 			describe("when a function is passed", function() {
 
-				it("should execute the function in the scope of the subclass", function() {
+				it("executes the function in the scope of the subclass", function() {
 					var whats_this,
 							Foo = new Class(),
 							Bar = Foo.subclass(function() {
@@ -114,7 +114,7 @@ function runTests( Class ) {
 					expect( whats_this ).toBe( Bar );
 				});
 
-				it("should call the function passing the subclass prototype property as the first argument", function() {
+				it("calls the function passing the subclass prototype property as the first argument", function() {
 					var probe,
 							Foo = new Class(),
 							Bar = Foo.subclass(function( proto ) {
@@ -125,28 +125,28 @@ function runTests( Class ) {
 
 			});
 
-			it("should set properties on subclass' prototype if an object is passed", function() {
+			it("sets properties on subclass' prototype if an object is passed", function() {
 				var prop = 123,
 						Foo = new Class(),
 						Bar = Foo.subclass({ prop: prop });
 				expect( Bar.prototype.prop ).toBe( prop );
 			});
 
-			it("should not set properties on superclass' prototype", function() {
+			it("does not set properties on superclass' prototype", function() {
 				var prop = 123,
 						Foo = new Class(),
 						Bar = Foo.subclass({ prop: prop });
 				expect( typeof Foo.prototype.prop ).toEqual("undefined");
 			});
 
-			it("should override properties on subclass' prototype", function() {
+			it("overrides properties on subclass' prototype", function() {
 				var prop = 123,
 						Foo = new Class({ prop: "abc" }),
 						Bar = Foo.subclass({ prop: prop });
 				expect( Bar.prototype.prop ).toBe( prop );
 			});
 
-			it("should not override properties on superclass' prototype", function() {
+			it("does not override properties on superclass' prototype", function() {
 				var original_prop = "abc",
 						prop = 123,
 						Foo = new Class({ prop: original_prop }),
@@ -154,13 +154,13 @@ function runTests( Class ) {
 				expect( Foo.prototype.prop ).toBe( original_prop );
 			});
 
-			it("should set the _superclass property on subclass, pointing at the superclass", function() {
+			it("sets the _superclass property on subclass, pointing at the superclass", function() {
 				var Foo = new Class(),
 						Bar = Foo.subclass();
 				expect( Bar._superclass ).toBe( Foo );
 			});
 
-			it("should set the _parent property on instances, pointing at superclass.prototype", function() {
+			it("sets the _parent property on instances, pointing at superclass.prototype", function() {
 				var Foo = new Class(),
 						Bar = Foo.subclass(),
 						bar = new Bar();
