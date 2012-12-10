@@ -107,7 +107,7 @@ nyan._parent === Animal.prototype // => true
 Include, augment and reopen
 ---------------------------
 
-The `include` method accepts an object and copies its properties to the class' `prototype` property:
+The `include` method accepts one or more objects and copies their properties to the class' `prototype` property:
 
 ```javascript
 var Duck = new Class();
@@ -122,7 +122,7 @@ var donald = new Duck();
 donald.quack(); // => "Quack!"
 ```
 
-The `augment` method accepts an object and copies its properties to the class:
+The `augment` method accepts one or more objects and copies their properties to the class:
 
 ```javascript
 var Foo = new Class();
@@ -134,6 +134,7 @@ Foo.augment({
 });
 
 Foo.classMethod(); // => "I am a class method!"
+```
 
 The `reopen` method accepts the same arguments as the `Class` constructor: if you pass an object, its properties get added to the class prototype, if you pass a function it is executed in the scope of the class, passing the prototype as the first argument.
 
