@@ -39,7 +39,7 @@ Usage
 Class definition
 ----------------
 
-Pass an object literal to the constructor to create a class and add the object's properties to the class `prototype` property:
+Pass an object to the constructor to create a class and add the object's properties to the class `prototype` property:
 
 ```javascript
 var Foo = new Class({
@@ -57,10 +57,12 @@ Alternatively, you can pass a function to the constructor, and it will be execut
 ```javascript
 var Foo = new Class(function( proto ) {
 
+  // `this` is the class, here Foo
   this.classMethod = function() {
     return "I am a class method";
   }
 
+  // first argument is the class `prototype` property (here Foo.prototype)
   proto.instanceMethod = function() {
     return "Hello :)";
   }
@@ -102,8 +104,8 @@ Cat._superclass === Animal // => true
 nyan._parent === Animal.prototype // => true
 ```
 
-Include and augment
--------------------
+Include, augment and reopen
+---------------------------
 
 The `include` method accepts an object and copies its properties to the class' `prototype` property:
 
@@ -132,4 +134,37 @@ Foo.augment({
 });
 
 Foo.classMethod(); // => "I am a class method!"
+
+The `reopen` method accepts the same arguments as the `Class` constructor: if you pass an object, its properties get added to the class prototype, if you pass a function it is executed in the scope of the class, passing the prototype as the first argument.
+
+```javascript
+var Human = new Class(),
+    john = new Human();
+
+// Passing an object
+Human.reopen({
+  sing: function() {
+    return "Goo goo goo joob!";
+  }
+});
+
+john.sing(); // => "Goo goo goo joob!"
+
+// Passing a function
+Human.reopen(function( proto ) {
+
+  // `this` is the class, here Human
+  this.cogito = function() {
+    return "ergo sum.";
+  };
+
+  // proto here is Human.prototype
+  proto.eat = function() {
+    return "Yum!"
+  };
+
+});
+
+Human.cogito(); // => "ergo sum."
+john.eat();     // => "Yum!"
 ```
