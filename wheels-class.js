@@ -54,6 +54,10 @@
       this.augment.apply( this.prototype, arguments );
     };
 
+    klass.reopen = function( mixin ) {
+      extendProtoOrApply( this, mixin );
+    };
+
     extend( klass, { constructor: Class, _superclass: Function } );
     klass.prototype._parent = Object;
     extendProtoOrApply( klass, mixin );

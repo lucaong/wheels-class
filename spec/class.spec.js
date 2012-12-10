@@ -191,6 +191,43 @@ function runTests( Class ) {
 
 		});
 
+		describe("reopen", function() {
+
+			describe("when called passing an object", function() {
+
+				it("adds the object properties to the prototype", function() {
+					var prop = 123,
+							Foo = new Class();
+					Foo.reopen({ prop: prop });
+					expect( Foo.prototype.prop ).toBe( prop );
+				});
+
+			});
+
+			describe("when called passing a function", function() {
+
+				it("executes the function in the scope of the class", function() {
+					var Foo = new Class(),
+							whats_this;
+					Foo.reopen(function() {
+						whats_this = this;
+					});
+					expect( whats_this ).toBe( Foo );
+				});
+
+				it("executes the function passing the class prototype property as the first argument", function() {
+					var probe,
+							Foo = new Class();
+					Foo.reopen(function( proto ) {
+						probe = proto;
+					});
+					expect( probe ).toBe( Foo.prototype );
+				});
+
+			});
+
+		});
+
 	});
 
-};
+}
