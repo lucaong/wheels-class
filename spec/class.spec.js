@@ -178,6 +178,40 @@ function runTests( Class ) {
 				expect( Foo.prototype.prop ).toBe( prop );
 			});
 
+			it("accepts multiple arguments and includes all them in order", function() {
+				var prop = 123,
+						other_prop = 321,
+						Foo = new Class();
+				Foo.include({ prop: prop, other_prop: "abc" }, { other_prop: other_prop });
+				expect( Foo.prototype.prop ).toBe( prop );
+				expect( Foo.prototype.other_prop ).toBe( other_prop );
+			});
+
+			describe("if an argument has an `included` method", function() {
+
+				it("it calls it passing the class", function() {
+					var spy = this.stub().returns({ prop: "foo" }),
+							Foo = new Class();
+					Foo.include({ included: spy });
+					expect( spy ).toHaveBeenCalledOnceWith( Foo );
+				});
+
+				it("it calls it and includes the returned value, if any", function() {
+					var spy = this.stub().returns({ prop: "foo" }),
+							Foo = new Class();
+					Foo.include({ included: spy });
+					expect( Foo.prototype.prop ).toEqual( "foo" );
+				});
+
+				it("it calls it and, if a falsy value is returned, includes the argument object", function() {
+					var spy = this.stub().returns( null ),
+							Foo = new Class();
+					Foo.include({ included: spy, prop: "bar" });
+					expect( Foo.prototype.prop ).toEqual( "bar" );
+				});
+
+			});
+
 		});
 
 		describe("augment", function() {
@@ -187,6 +221,75 @@ function runTests( Class ) {
 						Foo = new Class();
 				Foo.augment({ prop: prop });
 				expect( Foo.prop ).toBe( prop );
+			});
+
+			describe("if an argument has an `augmenting` method", function() {
+
+				it("it calls it passing the class", function() {
+					var spy = this.stub().returns({ prop: "foo" }),
+							Foo = new Class();
+					Foo.augment({ augmenting: spy });
+					expect( spy ).toHaveBeenCalledOnceWith( Foo );
+				});
+
+				it("it calls it and extends class with the returned value, if any", function() {
+					var spy = this.stub().returns({ prop: "foo" }),
+							Foo = new Class();
+					Foo.augment({ augmenting: spy });
+					expect( Foo.prop ).toEqual( "foo" );
+				});
+
+				it("it calls it and, if a falsy value is returned, extends the class with the argument object", function() {
+					var spy = this.stub().returns( null ),
+							Foo = new Class();
+					Foo.augment({ augmenting: spy, prop: "bar" });
+					expect( Foo.prop ).toEqual( "bar" );
+				});
+
+			});
+
+		});
+
+		describe("inclusion in another class", function() {
+
+			it("causes the included class' instance properties to be added to the includer class prototype property", function() {
+				var Foo = new Class({ prop: 123 }),
+						Bar = new Class();
+				Bar.include( Foo );
+				expect( Bar.prototype.prop ).toEqual( 123 );
+			});
+
+			it("does not override the _parent property", function() {
+				var Foo = new Class({ prop: 123 }),
+						Bar = new Class(),
+						Baz = Bar.subclass(),
+						original_parent = Baz.prototype._parent;
+				Baz.include( Foo );
+				expect( Baz.prototype._parent ).toEqual( original_parent );
+			});
+
+		});
+
+		describe("augmenting another class", function() {
+
+			it("causes the augmenting class' properties to be added to the augmented class", function() {
+				var Foo = new Class(function() {
+							this.prop = 123;
+						}),
+						Bar = new Class();
+				Bar.augment( Foo );
+				expect( Bar.prop ).toEqual( 123 );
+			});
+
+			it("does not override the _superclass property", function() {
+				var Foo = new Class(function() {
+							this.prop = 123;
+						}),
+						Bar = new Class(),
+						Baz = Bar.subclass(),
+						original_superclass = Baz._superclass;
+				Baz.augment( Foo );
+				expect( Baz._superclass ).toEqual( original_superclass );
 			});
 
 		});

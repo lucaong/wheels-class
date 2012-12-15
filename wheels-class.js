@@ -2,12 +2,9 @@
   
   function Class( mixin ) {
 
-    var extend = function( obj ) {
-          var other_objs = Array.prototype.slice.call( arguments, 1 );
-          for ( var i = 0, len = other_objs.length; i < len; i++ ) {
-            for ( var k in other_objs[ i ] ) {
-              obj[ k ] = other_objs[ i ][ k ];
-            }
+    var extend = function( obj, mixin ) {
+          for ( var k in mixin ) {
+            obj[ k ] = mixin[ k ];
           }
           return obj;
         },
@@ -18,6 +15,13 @@
           } else {
             extend( klass.prototype, mixin );
           }
+        },
+
+        excludeProps = function( mixin, excluded_props ) {
+          for ( var i = 0, len = excluded_props.length; i < len; i++ ) {
+            delete mixin[ excluded_props[ i ] ];
+          }
+          return mixin;
         };
 
     function klass() {
@@ -45,13 +49,31 @@
     };
 
     klass.augment = function() {
-      var args = Array.prototype.slice.apply( arguments );
-      args.unshift( this );
-      extend.apply( this, args );
+      for ( var i = 0, len = arguments.length; i < len; i++ ) {
+        if ( typeof arguments[ i ].augmenting === "function" ) {
+          extend( this, arguments[ i ].augmenting( this ) || arguments[ i ] );
+        } else {
+          extend( this, arguments[ i ] );
+        }
+      }
     };
 
     klass.include = function() {
-      this.augment.apply( this.prototype, arguments );
+      for ( var i = 0, len = arguments.length; i < len; i++ ) {
+        if ( typeof arguments[ i ].included === "function" ) {
+          extend( this.prototype, arguments[ i ].included( this ) || arguments[ i ] );
+        } else {
+          extend( this.prototype, arguments[ i ] );
+        }
+      }
+    };
+
+    klass.included = function() {
+      return excludeProps( extend( {}, this.prototype ), [ "_parent" ] );
+    };
+
+    klass.augmenting = function() {
+      return excludeProps( extend( {}, this ), [ "_superclass" ] );
     };
 
     klass.reopen = function( mixin ) {
