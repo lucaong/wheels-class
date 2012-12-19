@@ -187,26 +187,26 @@ function runTests( Class ) {
 				expect( Foo.prototype.other_prop ).toBe( other_prop );
 			});
 
-			describe("if an argument has an `included` method", function() {
+			describe("if an argument has an `_included` method", function() {
 
 				it("it calls it passing the class", function() {
 					var spy = this.stub().returns({ prop: "foo" }),
 							Foo = new Class();
-					Foo.include({ included: spy });
+					Foo.include({ _included: spy });
 					expect( spy ).toHaveBeenCalledOnceWith( Foo );
 				});
 
 				it("it calls it and includes the returned value, if any", function() {
 					var spy = this.stub().returns({ prop: "foo" }),
 							Foo = new Class();
-					Foo.include({ included: spy });
+					Foo.include({ _included: spy });
 					expect( Foo.prototype.prop ).toEqual( "foo" );
 				});
 
 				it("it calls it and, if a falsy value is returned, includes the argument object", function() {
 					var spy = this.stub().returns( null ),
 							Foo = new Class();
-					Foo.include({ included: spy, prop: "bar" });
+					Foo.include({ _included: spy, prop: "bar" });
 					expect( Foo.prototype.prop ).toEqual( "bar" );
 				});
 
@@ -223,26 +223,26 @@ function runTests( Class ) {
 				expect( Foo.prop ).toBe( prop );
 			});
 
-			describe("if an argument has an `augmenting` method", function() {
+			describe("if an argument has an `_augmenting` method", function() {
 
 				it("it calls it passing the class", function() {
 					var spy = this.stub().returns({ prop: "foo" }),
 							Foo = new Class();
-					Foo.augment({ augmenting: spy });
+					Foo.augment({ _augmenting: spy });
 					expect( spy ).toHaveBeenCalledOnceWith( Foo );
 				});
 
 				it("it calls it and extends class with the returned value, if any", function() {
 					var spy = this.stub().returns({ prop: "foo" }),
 							Foo = new Class();
-					Foo.augment({ augmenting: spy });
+					Foo.augment({ _augmenting: spy });
 					expect( Foo.prop ).toEqual( "foo" );
 				});
 
 				it("it calls it and, if a falsy value is returned, extends the class with the argument object", function() {
 					var spy = this.stub().returns( null ),
 							Foo = new Class();
-					Foo.augment({ augmenting: spy, prop: "bar" });
+					Foo.augment({ _augmenting: spy, prop: "bar" });
 					expect( Foo.prop ).toEqual( "bar" );
 				});
 

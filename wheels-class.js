@@ -50,8 +50,8 @@
 
     klass.augment = function() {
       for ( var i = 0, len = arguments.length; i < len; i++ ) {
-        if ( typeof arguments[ i ].augmenting === "function" ) {
-          extend( this, arguments[ i ].augmenting( this ) || arguments[ i ] );
+        if ( typeof arguments[ i ]._augmenting === "function" ) {
+          extend( this, arguments[ i ]._augmenting( this ) || arguments[ i ] );
         } else {
           extend( this, arguments[ i ] );
         }
@@ -60,15 +60,15 @@
 
     klass.include = function() {
       for ( var i = 0, len = arguments.length; i < len; i++ ) {
-        if ( typeof arguments[ i ].included === "function" ) {
-          extend( this.prototype, arguments[ i ].included( this ) || arguments[ i ] );
+        if ( typeof arguments[ i ]._included === "function" ) {
+          extend( this.prototype, arguments[ i ]._included( this ) || arguments[ i ] );
         } else {
           extend( this.prototype, arguments[ i ] );
         }
       }
     };
 
-    klass.included = function() {
+    klass._included = function() {
       return excludeProps( extend( {}, this.prototype ), [ "_parent" ] );
     };
 
