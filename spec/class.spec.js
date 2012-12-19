@@ -292,6 +292,18 @@ function runTests( Class ) {
 				expect( Baz._superclass ).toEqual( original_superclass );
 			});
 
+			it("does not override the _augmenting property", function() {
+				var Foo = new Class(function() {
+							this.prop = 123;
+						}),
+						Bar = new Class(function() {
+							this._augmenting = function(){};
+						}),
+						original_augmenting = Bar._augmenting;
+				Bar.augment( Foo );
+				expect( Bar._augmenting ).toEqual( original_augmenting );
+			});
+
 		});
 
 		describe("reopen", function() {

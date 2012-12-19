@@ -72,8 +72,8 @@
       return excludeProps( extend( {}, this.prototype ), [ "_parent" ] );
     };
 
-    klass.augmenting = function() {
-      return excludeProps( extend( {}, this ), [ "_superclass" ] );
+    klass._augmenting = function() {
+      return excludeProps( extend( {}, this ), [ "_superclass", "_augmenting" ] );
     };
 
     klass.reopen = function( mixin ) {
