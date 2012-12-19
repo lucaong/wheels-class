@@ -24,7 +24,7 @@ function runTests( Class ) {
 
 	buster.spec.expose();
 
-	describe("Class constructor", function() {
+	describe("Class", function() {
 
 		it("sets the right constructor on class instance", function() {
 			var Foo = new Class();
@@ -64,7 +64,7 @@ function runTests( Class ) {
 
 	});
 
-	describe("class instance", function() {
+	describe("class", function() {
 
 		describe("new", function() {
 			it("instantiates class", function() {
@@ -250,7 +250,7 @@ function runTests( Class ) {
 
 		});
 
-		describe("inclusion in another class", function() {
+		describe("when included in another class", function() {
 
 			it("causes the included class' instance properties to be added to the includer class prototype property", function() {
 				var Foo = new Class({ prop: 123 }),
@@ -270,7 +270,7 @@ function runTests( Class ) {
 
 		});
 
-		describe("augmenting another class", function() {
+		describe("when augmenting another class", function() {
 
 			it("causes the augmenting class' properties to be added to the augmented class", function() {
 				var Foo = new Class(function() {
