@@ -2,7 +2,7 @@
   
   function Class( mixin ) {
 
-    var extend = function( obj, mixin ) {
+    var copyProps = function( obj, mixin ) {
           for ( var k in mixin ) {
             obj[ k ] = mixin[ k ];
           }
@@ -13,7 +13,7 @@
           if ( typeof mixin === "function" ) {
             mixin.call( klass, klass.prototype );
           } else {
-            extend( klass.prototype, mixin );
+            copyProps( klass.prototype, mixin );
           }
         };
 
@@ -32,11 +32,11 @@
       if ( klass.__proto__ ) {
         klass.__proto__ = superclass;
       } else {
-        extend( klass, superclass );
+        copyProps( klass, superclass );
       }
-      extend( klass, { _superclass: superclass } );
+      copyProps( klass, { _superclass: superclass } );
       klass.prototype = proto;
-      extend( klass.prototype, { constructor: klass, _parent: superclass.prototype } );
+      copyProps( klass.prototype, { constructor: klass, _parent: superclass.prototype } );
       extendProtoOrApply( klass, mixin );
       return klass;
     };
@@ -44,9 +44,9 @@
     klass.augment = function() {
       for ( var i = 0, len = arguments.length; i < len; i++ ) {
         if ( typeof arguments[ i ]._augmenting === "function" ) {
-          extend( this, arguments[ i ]._augmenting( this ) || arguments[ i ] );
+          copyProps( this, arguments[ i ]._augmenting( this ) || arguments[ i ] );
         } else {
-          extend( this, arguments[ i ] );
+          copyProps( this, arguments[ i ] );
         }
       }
     };
@@ -56,7 +56,7 @@
         if ( typeof arguments[ i ]._including === "function" ) {
           copyProps( this.prototype, arguments[ i ]._including( this ) || arguments[ i ] );
         } else {
-          extend( this.prototype, arguments[ i ] );
+          copyProps( this.prototype, arguments[ i ] );
         }
       }
     };
@@ -65,7 +65,7 @@
       extendProtoOrApply( this, mixin );
     };
 
-    extend( klass, { constructor: Class, _superclass: Function } );
+    copyProps( klass, { constructor: Class, _superclass: Function } );
     klass.prototype._parent = Object;
     extendProtoOrApply( klass, mixin );
 
