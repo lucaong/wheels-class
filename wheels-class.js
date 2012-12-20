@@ -2,11 +2,11 @@
   
   function Class( mixin ) {
 
-    var copyProps = function( obj, mixin ) {
+    var copyProps = function( target, mixin ) {
           for ( var k in mixin ) {
-            obj[ k ] = mixin[ k ];
+            target[ k ] = mixin[ k ];
           }
-          return obj;
+          return target;
         },
 
         extendProtoOrApply = function( klass, mixin ) {
@@ -15,26 +15,27 @@
           } else {
             copyProps( klass.prototype, mixin );
           }
-        };
+        },
 
-    function klass() {
-      if ( typeof this.initialize === "function" ) {
-        this.initialize.apply( this, arguments );
-      }
-    }
+        klass = function klass() {
+          if ( typeof this.initialize === "function" ) {
+            this.initialize.apply( this, arguments );
+          }
+        };
 
     klass.subclass = function( mixin ) {
       var superclass = this,
-          proto = new superclass();
-      function klass() {
-        superclass.apply( this, arguments );
-      }
+          proto = new superclass(),
+          klass = function klass() {
+            superclass.apply( this, arguments );
+          };
+
       if ( klass.__proto__ ) {
         klass.__proto__ = superclass;
       } else {
         copyProps( klass, superclass );
       }
-      copyProps( klass, { _superclass: superclass } );
+      klass._superclass = superclass;
       klass.prototype = proto;
       copyProps( klass.prototype, { constructor: klass, _parent: superclass.prototype } );
       extendProtoOrApply( klass, mixin );
@@ -70,7 +71,6 @@
     extendProtoOrApply( klass, mixin );
 
     return klass;
-
   }
 
   // Export Class as
