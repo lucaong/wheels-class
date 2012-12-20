@@ -15,13 +15,6 @@
           } else {
             extend( klass.prototype, mixin );
           }
-        },
-
-        excludeProps = function( mixin, excluded_props ) {
-          for ( var i = 0, len = excluded_props.length; i < len; i++ ) {
-            delete mixin[ excluded_props[ i ] ];
-          }
-          return mixin;
         };
 
     function klass() {
@@ -60,20 +53,12 @@
 
     klass.include = function() {
       for ( var i = 0, len = arguments.length; i < len; i++ ) {
-        if ( typeof arguments[ i ]._included === "function" ) {
-          extend( this.prototype, arguments[ i ]._included( this ) || arguments[ i ] );
+        if ( typeof arguments[ i ]._including === "function" ) {
+          copyProps( this.prototype, arguments[ i ]._including( this ) || arguments[ i ] );
         } else {
           extend( this.prototype, arguments[ i ] );
         }
       }
-    };
-
-    klass._included = function() {
-      return excludeProps( extend( {}, this.prototype ), [ "_parent" ] );
-    };
-
-    klass._augmenting = function() {
-      return excludeProps( extend( {}, this ), [ "_superclass", "_augmenting" ] );
     };
 
     klass.reopen = function( mixin ) {
