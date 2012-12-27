@@ -53,11 +53,7 @@
             superclass.apply( this, arguments );
           };
 
-      if ( klass.__proto__ ) {
-        klass.__proto__ = superclass;
-      } else {
-        copyProps( klass, superclass );
-      }
+      copyProps( klass, superclass );
       klass._superclass = superclass;
       klass.prototype = proto;
       copyProps( klass.prototype, { constructor: klass, _parent: superclass.prototype } );
