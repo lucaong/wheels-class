@@ -1,6 +1,8 @@
 (function( top ) {
   
-  function Class( mixin ) {
+  var Class = {};
+
+  Class.new = function Class( mixin ) {
 
     var copyProps = function( target, mixin ) {
           for ( var k in mixin ) {
@@ -9,37 +11,43 @@
           return target;
         },
 
-        extendProtoOrApply = function( klass, mixin ) {
+        extendInstanceOrApply = function( klass, mixin ) {
           if ( typeof mixin === "function" ) {
-            mixin.call( klass, klass.prototype );
+            mixin.call( klass, klass._instance_proto );
           } else {
-            copyProps( klass.prototype, mixin );
+            copyProps( klass._instance_proto, mixin );
           }
         },
 
-        klass = function klass() {
-          if ( typeof this.initialize === "function" ) {
-            this.initialize.apply( this, arguments );
+        createObject = function( proto ) {
+          if ( typeof Object.create === "function" ) {
+            return Object.create( proto );
+          } else {
+            var constructor = function() {};
+            constructor.prototype = proto;
+            return new constructor();
           }
-        };
+        },
+
+        klass = {};
+
+    klass.new = function klass() {
+      var instance = createObject( this._instance_proto || Object );
+      if ( typeof instance.initialize === "function" ) {
+        instance.initialize.apply( this, arguments );
+      }
+      return instance;
+    };
 
     klass.subclass = function( mixin ) {
       var superclass = this,
-          proto = new superclass(),
-          klass = function klass() {
-            superclass.apply( this, arguments );
-          };
+          proto = superclass.new(),
+          subclass = createObject( superclass );
 
-      if ( klass.__proto__ ) {
-        klass.__proto__ = superclass;
-      } else {
-        copyProps( klass, superclass );
-      }
-      klass._superclass = superclass;
-      klass.prototype = proto;
-      copyProps( klass.prototype, { constructor: klass, _parent: superclass.prototype } );
-      extendProtoOrApply( klass, mixin );
-      return klass;
+      copyProps( subclass, { _superclass: superclass, _instance_proto: proto } );
+      copyProps( subclass._instance_proto, { _class: subclass, _parent_proto: superclass._instance_proto } );
+      extendInstanceOrApply( subclass, mixin );
+      return subclass;
     };
 
     klass.augment = function() {
@@ -55,20 +63,20 @@
     klass.include = function() {
       for ( var i = 0, len = arguments.length; i < len; i++ ) {
         if ( typeof arguments[ i ]._including === "function" ) {
-          copyProps( this.prototype, arguments[ i ]._including( this ) || arguments[ i ] );
+          copyProps( this._instance_proto, arguments[ i ]._including( this ) || arguments[ i ] );
         } else {
-          copyProps( this.prototype, arguments[ i ] );
+          copyProps( this._instance_proto, arguments[ i ] );
         }
       }
     };
 
     klass.reopen = function( mixin ) {
-      extendProtoOrApply( this, mixin );
+      extendInstanceOrApply( this, mixin );
     };
 
-    copyProps( klass, { constructor: Class, _superclass: Function } );
-    klass.prototype._parent = Object;
-    extendProtoOrApply( klass, mixin );
+    copyProps( klass, { _class: this, _superclass: Function } );
+    klass._instance_proto = { _parent_proto: Object, _class: klass };
+    extendInstanceOrApply( klass, mixin );
 
     return klass;
   }

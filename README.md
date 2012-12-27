@@ -28,7 +28,7 @@ require(["wheels-class"], function( Class ) {
 ```html
 <script type="text/javascript" src="path/to/wheels-class.js"></script>
 <script type="text/javascript">
-  var MyClass = new Wheels.Class();
+  var MyClass = Wheels.Class.new();
 </script>
 ```
 
@@ -42,20 +42,20 @@ Class definition
 Pass an object to the constructor to create a class and add the object's properties to the class `prototype` property:
 
 ```javascript
-var Foo = new Class({
+var Foo = Class.new({
   greet: function() {
     return "Hello :)";
   }
 });
 
-var foo = new Foo();
+var foo = Foo.new();
 foo.greet(); // => "Hello :)"
 ```
 
 Alternatively, you can pass a function to the constructor, and it will be executed in the scope of the class. That means that, whithin the function, `this` is the class itself. Also, the function will receive the `prototype` property of the class as the first argument:
 
 ```javascript
-var Foo = new Class(function( proto ) {
+var Foo = Class.new(function( proto ) {
 
   // `this` is the class, here Foo
   this.classMethod = function() {
@@ -69,7 +69,7 @@ var Foo = new Class(function( proto ) {
 
 });
 
-var foo = new Foo();
+var foo = Foo.new();
 
 Foo.classMethod();    // => "I am a class method"
 foo.instanceMethod(); // => "Hello :)"
@@ -81,7 +81,7 @@ Class inheritance
 The `subclass` method creates a subclass and accepts the same arguments as the constructor:
 
 ```javascript
-var Animal = new Class({
+var Animal = Class.new({
   eat: function() {
     return "Yum :)";
   }
@@ -93,7 +93,7 @@ var Cat = Animal.subclass({
   }
 });
 
-var nyan = new Cat();
+var nyan = Cat.new();
 nyan.eat();  // => "Yum :)"
 nyan.meow(); // => "Meow!"
 
@@ -110,7 +110,7 @@ Include, augment and reopen
 The `include` method accepts one or more objects and copies their properties to the class' `prototype` property:
 
 ```javascript
-var Duck = new Class();
+var Duck = Class.new();
 
 Duck.include({
   quack: function() {
@@ -125,7 +125,7 @@ donald.quack(); // => "Quack!"
 The `augment` method accepts one or more objects and copies their properties to the class:
 
 ```javascript
-var Foo = new Class();
+var Foo = Class.new();
 
 Foo.augment({
   classMethod: function() {
@@ -139,8 +139,8 @@ Foo.classMethod(); // => "I am a class method!"
 The `reopen` method accepts the same arguments as the `Class` constructor: if you pass an object, its properties get added to the class prototype, if you pass a function it is executed in the scope of the class, passing the prototype as the first argument.
 
 ```javascript
-var Human = new Class(),
-    john = new Human();
+var Human = Class.new(),
+    john = Human.new();
 
 // Passing an object
 Human.reopen({
