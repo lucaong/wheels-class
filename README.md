@@ -19,7 +19,7 @@ npm install wheels-class
 
 ```javascript
 require(["wheels-class"], function( Class ) {
-  var MyClass = new Class();
+  var MyClass = Class.new();
 });
 ```
 
