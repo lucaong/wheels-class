@@ -99,9 +99,6 @@ nyan.meow(); // => "Meow!"
 
 // The subclass also stores a reference to the superclass
 Cat._superclass === Animal // => true
-
-// And the instance stores a reference to the parent prototype
-nyan._parent === Animal.prototype // => true
 ```
 
 Include, augment and reopen
