@@ -17,6 +17,19 @@
           }
         },
 
+        augmenter = function( magic_method, target_prop ) {
+          return function() {
+            var target = target_prop ? this[ target_prop ] : this;
+            for ( var i = 0, len = arguments.length; i < len; i++ ) {
+              if ( typeof arguments[ i ][ magic_method ] === "function" ) {
+                copyProps( target, arguments[ i ][ magic_method ]( this ) || arguments[ i ] );
+              } else {
+                copyProps( target, arguments[ i ] );
+              }
+            }
+          }
+        },
+
         klass = function klass() {
           if ( typeof this.initialize === "function" ) {
             this.initialize.apply( this, arguments );
@@ -42,25 +55,9 @@
       return klass;
     };
 
-    klass.augment = function() {
-      for ( var i = 0, len = arguments.length; i < len; i++ ) {
-        if ( typeof arguments[ i ]._augmenting === "function" ) {
-          copyProps( this, arguments[ i ]._augmenting( this ) || arguments[ i ] );
-        } else {
-          copyProps( this, arguments[ i ] );
-        }
-      }
-    };
+    klass.augment = augmenter("_augmenting");
 
-    klass.include = function() {
-      for ( var i = 0, len = arguments.length; i < len; i++ ) {
-        if ( typeof arguments[ i ]._including === "function" ) {
-          copyProps( this.prototype, arguments[ i ]._including( this ) || arguments[ i ] );
-        } else {
-          copyProps( this.prototype, arguments[ i ] );
-        }
-      }
-    };
+    klass.include = augmenter("_including", "prototype");
 
     klass.reopen = function( mixin ) {
       extendProtoOrApply( this, mixin );
