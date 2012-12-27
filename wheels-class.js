@@ -19,13 +19,26 @@
           }
         },
 
+        augmenter = function( magic_method, target_prop ) {
+          return function() {
+            var target = target_prop ? this[ target_prop ] : this;
+            for ( var i = 0, len = arguments.length; i < len; i++ ) {
+              if ( typeof arguments[ i ][ magic_method ] === "function" ) {
+                copyProps( target, arguments[ i ][ magic_method ]( this ) || arguments[ i ] );
+              } else {
+                copyProps( target, arguments[ i ] );
+              }
+            }
+          }
+        },
+
         createObject = function( proto ) {
-          if ( typeof Object.create === "function" ) {
+          if ( Object.create ) {
             return Object.create( proto );
           } else {
             var F = function() {};
             F.prototype = proto;
-            return new F();
+            return new F;
           }
         },
 
@@ -50,25 +63,9 @@
       return subclass;
     };
 
-    klass.augment = function() {
-      for ( var i = 0, len = arguments.length; i < len; i++ ) {
-        if ( typeof arguments[ i ]._augmenting === "function" ) {
-          copyProps( this, arguments[ i ]._augmenting( this ) || arguments[ i ] );
-        } else {
-          copyProps( this, arguments[ i ] );
-        }
-      }
-    };
+    klass.augment = augmenter("_augmenting");
 
-    klass.include = function() {
-      for ( var i = 0, len = arguments.length; i < len; i++ ) {
-        if ( typeof arguments[ i ]._including === "function" ) {
-          copyProps( this._instance_proto, arguments[ i ]._including( this ) || arguments[ i ] );
-        } else {
-          copyProps( this._instance_proto, arguments[ i ] );
-        }
-      }
-    };
+    klass.include = augmenter( "_including", "_instance_proto" );
 
     klass.reopen = function( mixin ) {
       extendInstanceOrApply( this, mixin );
