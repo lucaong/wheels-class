@@ -23,9 +23,9 @@
           if ( typeof Object.create === "function" ) {
             return Object.create( proto );
           } else {
-            var constructor = function() {};
-            constructor.prototype = proto;
-            return new constructor();
+            var F = function() {};
+            F.prototype = proto;
+            return new F();
           }
         },
 
@@ -41,7 +41,7 @@
 
     klass.subclass = function( mixin ) {
       var superclass = this,
-          proto = superclass.new(),
+          proto = createObject( superclass._instance_proto ),
           subclass = createObject( superclass );
 
       copyProps( subclass, { _superclass: superclass, _instance_proto: proto } );
