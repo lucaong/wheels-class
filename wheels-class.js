@@ -30,6 +30,16 @@
           }
         },
 
+        createObject = function( proto ) {
+          if ( Object.create ) {
+            return Object.create( proto );
+          } else {
+            var F = function() {};
+            F.prototype = proto;
+            return new F;
+          }
+        },
+
         klass = function klass() {
           if ( typeof this.initialize === "function" ) {
             this.initialize.apply( this, arguments );
@@ -38,7 +48,7 @@
 
     klass.subclass = function( mixin ) {
       var superclass = this,
-          proto = new superclass(),
+          proto = createObject( superclass.prototype ),
           klass = function klass() {
             superclass.apply( this, arguments );
           };
