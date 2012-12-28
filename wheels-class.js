@@ -32,7 +32,7 @@
     var klass = {};
 
     klass.new = function() {
-      var instance = createObject( this._instance_proto || Object );
+      var instance = createObject( this._instance_proto );
       if ( typeof instance.initialize === "function" ) {
         instance.initialize.apply( this, arguments );
       }
