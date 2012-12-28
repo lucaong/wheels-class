@@ -193,11 +193,11 @@ function runTests( Class ) {
 
       describe("if an argument has an `_including` method", function() {
 
-        it("it calls it passing the class", function() {
+        it("it calls it passing the class and the _instance_proto", function() {
           var spy = this.stub().returns({ prop: "foo" }),
               Foo = Class.new();
           Foo.include({ _including: spy });
-          expect( spy ).toHaveBeenCalledOnceWith( Foo );
+          expect( spy ).toHaveBeenCalledOnceWith( Foo, Foo._instance_proto );
         });
 
         it("it calls it and includes the returned value", function() {
