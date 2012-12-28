@@ -1,48 +1,48 @@
 (function( top ) {
   
-  var Class = {};
+  var copyProps = function( target, mixin ) {
+        for ( var k in mixin ) {
+          target[ k ] = mixin[ k ];
+        }
+        return target;
+      },
+
+      extendInstanceOrApply = function( klass, mixin ) {
+        if ( typeof mixin === "function" ) {
+          mixin.call( klass, klass._instance_proto );
+        } else {
+          copyProps( klass._instance_proto, mixin );
+        }
+      },
+
+      augmenter = function( magic_method, target_prop ) {
+        return function() {
+          var target = target_prop ? this[ target_prop ] : this;
+          for ( var i = 0, len = arguments.length; i < len; i++ ) {
+            if ( typeof arguments[ i ][ magic_method ] === "function" ) {
+              copyProps( target, arguments[ i ][ magic_method ]( this ) || arguments[ i ] );
+            } else {
+              copyProps( target, arguments[ i ] );
+            }
+          }
+        }
+      },
+
+      createObject = function( proto ) {
+        if ( Object.create ) {
+          return Object.create( proto );
+        } else {
+          var F = function() {};
+          F.prototype = proto;
+          return new F;
+        }
+      },
+
+      Class = {};
 
   Class.new = function Class( mixin ) {
 
-    var copyProps = function( target, mixin ) {
-          for ( var k in mixin ) {
-            target[ k ] = mixin[ k ];
-          }
-          return target;
-        },
-
-        extendInstanceOrApply = function( klass, mixin ) {
-          if ( typeof mixin === "function" ) {
-            mixin.call( klass, klass._instance_proto );
-          } else {
-            copyProps( klass._instance_proto, mixin );
-          }
-        },
-
-        augmenter = function( magic_method, target_prop ) {
-          return function() {
-            var target = target_prop ? this[ target_prop ] : this;
-            for ( var i = 0, len = arguments.length; i < len; i++ ) {
-              if ( typeof arguments[ i ][ magic_method ] === "function" ) {
-                copyProps( target, arguments[ i ][ magic_method ]( this ) || arguments[ i ] );
-              } else {
-                copyProps( target, arguments[ i ] );
-              }
-            }
-          }
-        },
-
-        createObject = function( proto ) {
-          if ( Object.create ) {
-            return Object.create( proto );
-          } else {
-            var F = function() {};
-            F.prototype = proto;
-            return new F;
-          }
-        },
-
-        klass = {};
+    var klass = {};
 
     klass.new = function klass() {
       var instance = createObject( this._instance_proto || Object );
@@ -76,7 +76,7 @@
     extendInstanceOrApply( klass, mixin );
 
     return klass;
-  }
+  };
 
   // Export Class as
   if ( typeof exports !== "undefined" ) {
