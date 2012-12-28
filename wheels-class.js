@@ -80,13 +80,10 @@
       extendInstanceOrApply( this, mixin );
     };
 
-    copyProps( klass, {
-      _class:      this,
-      _superclass: Function
-    });
+    klass._class = this;
 
     klass._instance_proto = {
-      _parent: Object,
+      _parent: Object.prototype,
       _class:  klass
     };
 

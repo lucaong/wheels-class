@@ -37,12 +37,7 @@ function runTests( Class ) {
         var prop = function() {},
             Foo = Class.new({ method: prop });
         expect( Foo._instance_proto.method ).toBe( prop );
-      });
-
-      it("sets a _superclass property pointing to Function", function() {
-        var Foo = Class.new();
-        expect( Foo._superclass ).toBe( Function );
-      });
+      }); 
 
       describe("when called passing a function", function() {
 
@@ -100,10 +95,10 @@ function runTests( Class ) {
         expect( scope ).toBe( foo );
       });
 
-      it("sets a _parent property pointing at Object", function() {
+      it("sets a _parent property pointing at Object.prototype", function() {
         var Foo = Class.new(),
             foo = Foo.new();
-        expect( foo._parent ).toBe( Object );
+        expect( foo._parent ).toBe( Object.prototype );
       });
     });
 
