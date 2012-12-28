@@ -44,8 +44,14 @@
           proto = createObject( superclass._instance_proto ),
           subclass = createObject( superclass );
 
-      copyProps( subclass, { _superclass: superclass, _instance_proto: proto } );
-      copyProps( subclass._instance_proto, { _class: subclass, _parent: superclass._instance_proto } );
+      copyProps( subclass, {
+        _superclass:     superclass,
+        _instance_proto: proto
+      });
+      copyProps( subclass._instance_proto, {
+        _class:  subclass,
+        _parent: superclass._instance_proto
+      });
       extendInstanceOrApply( subclass, mixin );
       return subclass;
     };
@@ -74,8 +80,16 @@
       extendInstanceOrApply( this, mixin );
     };
 
-    copyProps( klass, { _class: this, _superclass: Function } );
-    klass._instance_proto = { _parent: Object, _class: klass };
+    copyProps( klass, {
+      _class:      this,
+      _superclass: Function
+    });
+
+    klass._instance_proto = {
+      _parent: Object,
+      _class:  klass
+    };
+
     extendInstanceOrApply( klass, mixin );
 
     return klass;
