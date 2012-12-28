@@ -15,19 +15,6 @@
         }
       },
 
-      augmenter = function( magic_method, target_prop ) {
-        return function() {
-          var target = target_prop ? this[ target_prop ] : this;
-          for ( var i = 0, len = arguments.length; i < len; i++ ) {
-            if ( typeof arguments[ i ][ magic_method ] === "function" ) {
-              copyProps( target, arguments[ i ][ magic_method ]( this ) || arguments[ i ] );
-            } else {
-              copyProps( target, arguments[ i ] );
-            }
-          }
-        }
-      },
-
       createObject = function( proto ) {
         if ( Object.create ) {
           return Object.create( proto );
@@ -63,9 +50,25 @@
       return subclass;
     };
 
-    klass.augment = augmenter("_augmenting");
+    klass.augment = function() {
+      for ( var i = 0, len = arguments.length, mixin; i < len; i++ ) {
+        mixin = arguments[ i ];
+        if ( typeof mixin._augmenting === "function" ) {
+          mixin = mixin._augmenting( this ) || mixin;
+        }
+        copyProps( this, mixin );
+      }
+    };
 
-    klass.include = augmenter( "_including", "_instance_proto" );
+    klass.include = function() {
+      for ( var i = 0, len = arguments.length, mixin; i < len; i++ ) {
+        mixin = arguments[ i ];
+        if ( typeof mixin._including === "function" ) {
+          mixin = mixin._including( this ) || mixin;
+        }
+        copyProps( this._instance_proto, mixin );
+      }
+    };
 
     klass.reopen = function( mixin ) {
       extendInstanceOrApply( this, mixin );
