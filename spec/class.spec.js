@@ -83,11 +83,21 @@ function runTests( Class ) {
         expect( foo._class ).toBe( Foo );
       });
 
-      it("calls the initialize method, if defined", function() {
+      it("calls the initialize method, if defined, passing the original arguments of new", function() {
         var spy = this.spy(),
             Foo = Class.new({ initialize: spy }),
+            foo = Foo.new( "abc", 123 );
+        expect( spy ).toHaveBeenCalledWith( "abc", 123 );
+      });
+
+      it("calls the initialize method in the scope of the instance", function() {
+        var scope,
+            scopeProbe = function() {
+              scope = this;
+            },
+            Foo = Class.new({ initialize: scopeProbe }),
             foo = Foo.new();
-        expect( spy ).toHaveBeenCalled();
+        expect( scope ).toBe( foo );
       });
 
       it("sets a _parent property pointing at Object", function() {
