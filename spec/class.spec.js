@@ -200,18 +200,11 @@ function runTests( Class ) {
           expect( spy ).toHaveBeenCalledOnceWith( Foo );
         });
 
-        it("it calls it and includes the returned value, if any", function() {
+        it("it calls it and includes the returned value", function() {
           var spy = this.stub().returns({ prop: "foo" }),
               Foo = Class.new();
           Foo.include({ _including: spy });
           expect( Foo._instance_proto.prop ).toEqual( "foo" );
-        });
-
-        it("it calls it and, if a falsy value is returned, includes the argument object", function() {
-          var spy = this.stub().returns( null ),
-              Foo = Class.new();
-          Foo.include({ _including: spy, prop: "bar" });
-          expect( Foo._instance_proto.prop ).toEqual( "bar" );
         });
 
       });
@@ -236,18 +229,11 @@ function runTests( Class ) {
           expect( spy ).toHaveBeenCalledOnceWith( Foo );
         });
 
-        it("it calls it and extends class with the returned value, if any", function() {
+        it("it calls it and extends class with the returned value", function() {
           var spy = this.stub().returns({ prop: "foo" }),
               Foo = Class.new();
           Foo.augment({ _augmenting: spy });
           expect( Foo.prop ).toEqual( "foo" );
-        });
-
-        it("it calls it and, if a falsy value is returned, extends the class with the argument object", function() {
-          var spy = this.stub().returns( null ),
-              Foo = Class.new();
-          Foo.augment({ _augmenting: spy, prop: "bar" });
-          expect( Foo.prop ).toEqual( "bar" );
         });
 
       });

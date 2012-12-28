@@ -54,7 +54,7 @@
       for ( var i = 0, len = arguments.length, mixin; i < len; i++ ) {
         mixin = arguments[ i ];
         if ( typeof mixin._augmenting === "function" ) {
-          mixin = mixin._augmenting( this ) || mixin;
+          mixin = mixin._augmenting( this );
         }
         copyProps( this, mixin );
       }
@@ -64,7 +64,7 @@
       for ( var i = 0, len = arguments.length, mixin; i < len; i++ ) {
         mixin = arguments[ i ];
         if ( typeof mixin._including === "function" ) {
-          mixin = mixin._including( this ) || mixin;
+          mixin = mixin._including( this );
         }
         copyProps( this._instance_proto, mixin );
       }
