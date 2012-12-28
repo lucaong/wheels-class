@@ -90,10 +90,10 @@ function runTests( Class ) {
         expect( spy ).toHaveBeenCalled();
       });
 
-      it("sets a _parent_proto property pointing at Object", function() {
+      it("sets a _parent property pointing at Object", function() {
         var Foo = Class.new(),
             foo = Foo.new();
-        expect( foo._parent_proto ).toBe( Object );
+        expect( foo._parent ).toBe( Object );
       });
     });
 
@@ -164,11 +164,11 @@ function runTests( Class ) {
         expect( Bar._superclass ).toBe( Foo );
       });
 
-      it("sets the _parent_proto property on instances, pointing at superclass._instance_proto", function() {
+      it("sets the _parent property on instances, pointing at superclass._instance_proto", function() {
         var Foo = Class.new(),
             Bar = Foo.subclass(),
             bar = Bar.new();
-        expect( bar._parent_proto ).toBe( Foo._instance_proto );
+        expect( bar._parent ).toBe( Foo._instance_proto );
       });
 
     });
