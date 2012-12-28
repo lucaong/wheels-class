@@ -27,11 +27,11 @@
 
       Class = {};
 
-  Class.new = function Class( mixin ) {
+  Class.new = function( mixin ) {
 
     var klass = {};
 
-    klass.new = function klass() {
+    klass.new = function() {
       var instance = createObject( this._instance_proto || Object );
       if ( typeof instance.initialize === "function" ) {
         instance.initialize.apply( this, arguments );
