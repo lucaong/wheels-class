@@ -27,19 +27,17 @@
 
       Class = {};
 
-  Class.new = function( mixin ) {
+  Class._instance_proto = {
 
-    var klass = {};
-
-    klass.new = function() {
+    new: function() {
       var instance = createObject( this._instance_proto );
       if ( typeof instance.initialize === "function" ) {
         instance.initialize.apply( instance, arguments );
       }
       return instance;
-    };
+    },
 
-    klass.subclass = function( mixin ) {
+    subclass: function( mixin ) {
       var superclass = this,
           proto = createObject( superclass._instance_proto ),
           subclass = createObject( superclass );
@@ -54,9 +52,9 @@
       });
       extendInstanceOrApply( subclass, mixin );
       return subclass;
-    };
+    },
 
-    klass.augment = function() {
+    augment: function() {
       for ( var i = 0, len = arguments.length, mixin; i < len; i++ ) {
         mixin = arguments[ i ];
         if ( typeof mixin._augmenting === "function" ) {
@@ -64,9 +62,9 @@
         }
         copyProps( this, mixin );
       }
-    };
+    },
 
-    klass.include = function() {
+    include: function() {
       for ( var i = 0, len = arguments.length, mixin; i < len; i++ ) {
         mixin = arguments[ i ];
         if ( typeof mixin._including === "function" ) {
@@ -74,11 +72,17 @@
         }
         copyProps( this._instance_proto, mixin );
       }
-    };
+    },
 
-    klass.reopen = function( mixin ) {
+    reopen: function( mixin ) {
       extendInstanceOrApply( this, mixin );
-    };
+    }
+
+  };
+
+  Class.new = function( mixin ) {
+
+    var klass = createObject( Class._instance_proto ); 
 
     klass._class = this;
 
