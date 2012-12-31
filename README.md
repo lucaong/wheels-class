@@ -39,7 +39,7 @@ Usage
 Class definition
 ----------------
 
-A new class is an instance of `Class`, and thus is created using the `Class.new` factory method. Calling `Class.new` passing an object creates a class and adds the object's properties to the instance's prototype (referenced also in `MyNewClass.\_instance\_proto`), so that they become instance properties when the class is instantiated:
+A new class is an instance of `Class`, and thus is created using the `Class.new` factory method. Calling `Class.new` passing an object creates a class and adds the object's properties to the instance's prototype (referenced also in `MyNewClass._instance_proto`), so that they become instance properties when the class is instantiated:
 
 ```javascript
 var Foo = Class.new({
@@ -140,7 +140,7 @@ var donald = new Duck();
 donald.quack(); // => "Quack!"
 ```
 
-If the included object has a method called `\_including`, then instead of simply copying the properties a more advanced algorithm is used: the method it is evaluated passing the including class and its instance prototype as arguments, and the properties of the returned object gets added to the instance's prototype. This enables explicit export of some properties only, as well as manipulation of the including class upon inclusion.
+If the included object has a method called `_including`, then instead of simply copying the properties a more advanced algorithm is used: the method it is evaluated passing the including class and its instance prototype as arguments, and the properties of the returned object gets added to the instance's prototype. This enables explicit export of some properties only, as well as manipulation of the including class upon inclusion.
 
 
 Augment
@@ -160,7 +160,7 @@ Foo.augment({
 Foo.classMethod(); // => "I am a class method!"
 ```
 
-Similarly to the `include` method, also `augment` supports an advanced behavior when the passed object has a `\_augmenting` method. In this case, instead of directly copying the object's properties, the `\_augmenting` method is evaluated passing the class as the first argument, and the returned object's properties are copied on the class.
+Similarly to the `include` method, also `augment` supports an advanced behavior when the passed object has a `_augmenting` method. In this case, instead of directly copying the object's properties, the `_augmenting` method is evaluated passing the class as the first argument, and the returned object's properties are copied on the class.
 
 
 Reopen
