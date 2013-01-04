@@ -39,12 +39,11 @@
 
     subclass: function( mixin ) {
       var superclass = this,
-          proto = createObject( superclass._instance_proto ),
           subclass = createObject( superclass );
 
       copyProps( subclass, {
         _superclass:     superclass,
-        _instance_proto: proto
+        _instance_proto: createObject( superclass._instance_proto )
       });
       copyProps( subclass._instance_proto, {
         _class:  subclass,
